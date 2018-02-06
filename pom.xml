@@ -1,0 +1,268 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>org-mi-jmeter</groupId>
+  <artifactId>org-mi-jmeter-sockjssampler</artifactId>
+  <version>0.0.1-SNAPSHOT</version>
+  <name>org-mi-jmeter-sockjssampler</name>
+  
+  <properties>
+    <java.version>1.8</java.version>
+  </properties>
+  
+  <parent>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-starter-parent</artifactId>
+    <version>1.4.3.RELEASE</version>
+  </parent>
+  
+  <!-- 
+  	novel package repository for JVM and Android projects
+  	it builds Git projects on demand and provides you with 
+  	ready-to-use artifacts (jar, aar)
+  -->
+  <repositories>
+	<repository>
+	    <id>jitpack.io</id>
+	    <url>https://jitpack.io</url>
+	</repository>
+  </repositories>
+  
+  <dependencies>
+  	<dependency>
+        <!-- Import dependency management from Spring Boot -->
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-dependencies</artifactId>
+        <version>1.2.7.RELEASE</version>
+        <type>pom</type>
+        <scope>import</scope>
+    </dependency>
+    <dependency>
+        <groupId>org.springframework</groupId>
+        <artifactId>spring-context</artifactId>
+        <version>4.3.5.RELEASE</version>
+    </dependency>
+    <dependency>
+        <groupId>org.springframework</groupId>
+        <artifactId>spring-websocket</artifactId>
+        <version>4.3.5.RELEASE</version>
+    </dependency>
+    <dependency>
+        <groupId>org.mockito</groupId>
+        <artifactId>mockito-all</artifactId>
+        <version>1.10.19</version>
+    </dependency>
+    <dependency>
+        <groupId>junit</groupId>
+        <artifactId>junit</artifactId>
+        <version>4.12</version>
+    </dependency>
+    <dependency>
+        <groupId>org.springframework</groupId>
+        <artifactId>spring-messaging</artifactId>
+        <version>4.3.5.RELEASE</version>
+    </dependency>
+    <dependency>
+        <groupId>org.eclipse.jetty</groupId>
+        <artifactId>jetty-client</artifactId>
+        <version>9.4.0.v20161208</version>
+    </dependency>
+    <dependency>
+        <groupId>org.apache.tomcat.embed</groupId>
+        <artifactId>tomcat-embed-websocket</artifactId>
+        <version>8.5.2</version>
+    </dependency>
+    <dependency>
+        <groupId>org.apache.tomcat.embed</groupId>
+        <artifactId>tomcat-embed-logging-log4j</artifactId>
+        <version>8.5.2</version>
+    </dependency>
+    <dependency>
+        <groupId>com.fasterxml.jackson.core</groupId>
+        <artifactId>jackson-databind</artifactId>
+        <version>2.5.3</version>
+        <scope>runtime</scope>
+    </dependency>
+    <dependency>
+	    <groupId>commons-logging</groupId>
+	    <artifactId>commons-logging</artifactId>
+	    <version>1.2</version>
+	</dependency>
+	<dependency>
+	    <groupId>log4j</groupId>
+	    <artifactId>log4j</artifactId>
+	    <version>1.2.17</version>
+	</dependency>
+	<dependency>
+	    <groupId>com.google.code.findbugs</groupId>
+	    <artifactId>jsr305</artifactId>
+	    <version>3.0.2</version>
+	</dependency>
+  	
+  	<dependency>
+	    <groupId>org.apache.jmeter</groupId>
+	    <artifactId>ApacheJMeter_core</artifactId>
+	    <version>3.1</version>
+	</dependency>
+	<dependency>
+	    <groupId>org.apache.jmeter</groupId>
+	    <artifactId>ApacheJMeter_java</artifactId>
+	    <version>3.1</version>
+	</dependency>
+	
+	<!-- 
+		test for eventsource 
+		with the help of jitpack.io Git project it builed on demand and 
+		provides you with ready-to-use artifacts (jar, aar)
+	-->
+	<dependency>
+	    <groupId>com.github.aslakhellesoy</groupId>
+	    <artifactId>eventsource-java</artifactId>
+	    <version>v0.1.1</version>
+	</dependency>
+  </dependencies>
+  <build>
+  	  <!-- define locations of resources -->
+	  <resources>
+			<resource>
+				<directory>src/main/resources</directory>
+			</resource>
+			<resource>
+				<directory>src/main/resources/properties</directory>
+			</resource>
+	  </resources>
+  	  <plugins>
+	      <!-- 
+	      	put 3rd party jars of ApacheJmeter to local repository for use in builds, 
+	      	cause of Security exception 'Invalid signature file digest for Manifest main attributes' 
+	      -->
+	      <plugin>
+	        <groupId>org.apache.maven.plugins</groupId>
+	        <artifactId>maven-install-plugin</artifactId>
+	        <version>2.5.2</version>
+	        <executions>
+	            <execution>
+	                <id>initialize-apache-jmeter-core</id>
+	                <phase>initialize</phase>
+	                <goals>
+	                    <goal>install-file</goal>
+	                </goals>
+	                <configuration>
+				      <groupId>org.apache.jmeter</groupId>
+					  <artifactId>ApacheJMeter_core</artifactId>
+					  <version>3.1</version>
+				      <packaging>jar</packaging>
+				      <file>${basedir}/dependencies/ApacheJMeter_core.jar</file>
+				      <generatePom>true</generatePom>
+				      <archive><compress>false</compress></archive>
+				    </configuration>
+	            </execution>
+	            <execution>
+	            	<id>initialize-apache-jmeter-java</id>
+	                <phase>initialize</phase>
+	                <goals>
+	                    <goal>install-file</goal>
+	                </goals>
+	                <configuration>
+				      <groupId>org.apache.jmeter</groupId>
+		    		  <artifactId>ApacheJMeter_java</artifactId>
+		    		  <version>3.1</version>
+				      <packaging>jar</packaging>
+				      <file>${basedir}/dependencies/ApacheJMeter_java.jar</file>
+				      <generatePom>true</generatePom>
+				      <archive><compress>false</compress></archive>
+				    </configuration>
+	            </execution>
+	        </executions>
+	      </plugin>
+	      <!-- 
+	      	Create an uber-jar, that take all dependencies, and extract the content
+	      	of the dependencies and put them with the classes/resources 
+	      	of the project itself, in one big JAR. By having such uber-jar, it is
+	      	easy for execution, because you will need only one big JAR 
+	      	instead of tons of small JARs to run your app. It also ease
+	      	distribution in some case. 
+	      -->
+	      <plugin>
+	        <groupId>org.apache.maven.plugins</groupId>
+	        <artifactId>maven-shade-plugin</artifactId>
+	        <version>3.1.0</version>
+	        <!-- 
+	        	provides Spring Boot support in Maven, allowing you to 
+	        	package executable jar or war archives and run an application “in-place”
+	        -->
+	        <dependencies>
+                <dependency>
+                    <groupId>org.springframework.boot</groupId>
+                    <artifactId>spring-boot-maven-plugin</artifactId>
+                    <version>1.2.7.RELEASE</version>
+                </dependency>
+            </dependencies>
+            <configuration>
+                <keepDependenciesWithProvidedScope>true</keepDependenciesWithProvidedScope>
+                <createDependencyReducedPom>true</createDependencyReducedPom>
+                <minimizeJar>false</minimizeJar>
+                <filters>
+	                <!-- 
+		              	To avoid the following error message with maven shade plugin: 'Exception in thread 
+		              	"main" java.lang.SecurityException: Invalid signature file digest for Manifest main attributes'
+		              	add the following configuration to filter all files in META-INF ending with .SF, .DSA, and .RSA
+		              	for all artifacts (*:*) when creating uber-jar file
+		            -->
+                    <filter>
+                        <artifact>*:*</artifact>
+                        <excludes>
+                            <exclude>META-INF/*.SF</exclude>
+                            <exclude>META-INF/*.DSA</exclude>
+                            <exclude>META-INF/*.RSA</exclude>
+                        </excludes>
+                    </filter>
+                </filters>
+            </configuration>
+	        <executions>
+	          <execution>
+	            <phase>package</phase>
+	            <goals>
+	              <goal>shade</goal>
+	            </goals>
+	            <configuration>
+		          <!-- 
+		          	using the default Shade plugin configuration with Maven 
+		          	
+		          	<transformer implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
+	                  <manifestEntries>
+	                    <Main-Class>orgMiJmeterSockjsSampler.Hello</Main-Class>
+	                  </manifestEntries>
+	                </transformer>
+		          	
+		          	that is inherited form spring-boot-starter-parent, 
+		          	I get the following error from Maven: Unable to parse configuration of mojo org.apache.maven.plugins:maven-shade-plugin:3.1.0:
+		          	shade for parameter transformers...
+		          	using a specific configuration, for that reason
+		          -->
+		          <transformers>
+                      <transformer
+                          implementation="org.apache.maven.plugins.shade.resource.AppendingTransformer">
+                          <resource>META-INF/spring.handlers</resource>
+                      </transformer>
+                      <transformer
+                          implementation="org.springframework.boot.maven.PropertiesMergingResourceTransformer">
+                          <resource>META-INF/spring.factories</resource>
+                      </transformer>
+                      <transformer
+                          implementation="org.apache.maven.plugins.shade.resource.AppendingTransformer">
+                          <resource>META-INF/spring.schemas</resource>
+                      </transformer>
+                      <transformer
+                          implementation="org.apache.maven.plugins.shade.resource.ServicesResourceTransformer" />
+                      <transformer
+                          implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
+                          <mainClass>orgMiJmeterSockjsSampler.Hello</mainClass>
+                      </transformer>
+                  </transformers>
+	            </configuration>
+	          </execution>
+	        </executions>
+	      </plugin>
+	    </plugins>
+  </build>
+</project>
