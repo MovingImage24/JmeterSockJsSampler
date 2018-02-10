@@ -39,7 +39,7 @@ public class SockJsWebsocketSubscriptionHandler implements StompFrameHandler
 			sb.append("\\n" + entry.getKey() + ":" + entry.getValue());
 		}
 		
-		sb.append("\\n\\n" + payload.toString() + "\\u0000\\n\"]; didn't match any pattern");
+		sb.append("\\n\\n" + payload.toString() + "\\u0000\\n\"];");
 						
 		this.responseMessage.addMessage(sb.toString());
 		this.responseMessage.setMessageCounter(this.messageCounter);

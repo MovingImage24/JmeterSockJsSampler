@@ -4,20 +4,20 @@
   <artifactId>org-mi-jmeter-sockjssampler</artifactId>
   <version>0.0.1-SNAPSHOT</version>
   <name>org-mi-jmeter-sockjssampler</name>
-  
+
   <properties>
     <java.version>1.8</java.version>
   </properties>
-  
+
   <parent>
     <groupId>org.springframework.boot</groupId>
     <artifactId>spring-boot-starter-parent</artifactId>
-    <version>1.4.3.RELEASE</version>
+    <version>1.5.10.RELEASE</version>
   </parent>
-  
-  <!-- 
+
+  <!--
   	novel package repository for JVM and Android projects
-  	it builds Git projects on demand and provides you with 
+  	it builds Git projects on demand and provides you with
   	ready-to-use artifacts (jar, aar)
   -->
   <repositories>
@@ -26,25 +26,24 @@
 	    <url>https://jitpack.io</url>
 	</repository>
   </repositories>
-  
+
   <dependencies>
   	<dependency>
         <!-- Import dependency management from Spring Boot -->
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-dependencies</artifactId>
-        <version>1.2.7.RELEASE</version>
+        <version>1.5.10.RELEASE</version>
         <type>pom</type>
-        <scope>import</scope>
     </dependency>
     <dependency>
         <groupId>org.springframework</groupId>
         <artifactId>spring-context</artifactId>
-        <version>4.3.5.RELEASE</version>
+        <version>5.0.3.RELEASE</version>
     </dependency>
     <dependency>
         <groupId>org.springframework</groupId>
         <artifactId>spring-websocket</artifactId>
-        <version>4.3.5.RELEASE</version>
+        <version>5.0.3.RELEASE</version>
     </dependency>
     <dependency>
         <groupId>org.mockito</groupId>
@@ -59,27 +58,27 @@
     <dependency>
         <groupId>org.springframework</groupId>
         <artifactId>spring-messaging</artifactId>
-        <version>4.3.5.RELEASE</version>
+        <version>5.0.3.RELEASE</version>
     </dependency>
     <dependency>
         <groupId>org.eclipse.jetty</groupId>
         <artifactId>jetty-client</artifactId>
-        <version>9.4.0.v20161208</version>
+        <version>9.4.8.v20171121</version>
     </dependency>
     <dependency>
         <groupId>org.apache.tomcat.embed</groupId>
         <artifactId>tomcat-embed-websocket</artifactId>
-        <version>8.5.2</version>
+        <version>9.0.4</version>
     </dependency>
     <dependency>
         <groupId>org.apache.tomcat.embed</groupId>
         <artifactId>tomcat-embed-logging-log4j</artifactId>
-        <version>8.5.2</version>
+        <version>9.0.0.M6</version>
     </dependency>
     <dependency>
         <groupId>com.fasterxml.jackson.core</groupId>
         <artifactId>jackson-databind</artifactId>
-        <version>2.5.3</version>
+        <version>2.8.11</version>
         <scope>runtime</scope>
     </dependency>
     <dependency>
@@ -97,7 +96,7 @@
 	    <artifactId>jsr305</artifactId>
 	    <version>3.0.2</version>
 	</dependency>
-  	
+
   	<dependency>
 	    <groupId>org.apache.jmeter</groupId>
 	    <artifactId>ApacheJMeter_core</artifactId>
@@ -108,10 +107,10 @@
 	    <artifactId>ApacheJMeter_java</artifactId>
 	    <version>3.1</version>
 	</dependency>
-	
-	<!-- 
-		test for eventsource 
-		with the help of jitpack.io Git project it builed on demand and 
+
+	<!--
+		test for eventsource
+		with the help of jitpack.io Git project it builed on demand and
 		provides you with ready-to-use artifacts (jar, aar)
 	-->
 	<dependency>
@@ -131,9 +130,9 @@
 			</resource>
 	  </resources>
   	  <plugins>
-	      <!-- 
-	      	put 3rd party jars of ApacheJmeter to local repository for use in builds, 
-	      	cause of Security exception 'Invalid signature file digest for Manifest main attributes' 
+	      <!--
+	      	put 3rd party jars of ApacheJmeter to local repository for use in builds,
+	      	cause of Security exception 'Invalid signature file digest for Manifest main attributes'
 	      -->
 	      <plugin>
 	        <groupId>org.apache.maven.plugins</groupId>
@@ -174,27 +173,27 @@
 	            </execution>
 	        </executions>
 	      </plugin>
-	      <!-- 
+	      <!--
 	      	Create an uber-jar, that take all dependencies, and extract the content
-	      	of the dependencies and put them with the classes/resources 
+	      	of the dependencies and put them with the classes/resources
 	      	of the project itself, in one big JAR. By having such uber-jar, it is
-	      	easy for execution, because you will need only one big JAR 
+	      	easy for execution, because you will need only one big JAR
 	      	instead of tons of small JARs to run your app. It also ease
-	      	distribution in some case. 
+	      	distribution in some case.
 	      -->
 	      <plugin>
 	        <groupId>org.apache.maven.plugins</groupId>
 	        <artifactId>maven-shade-plugin</artifactId>
 	        <version>3.1.0</version>
-	        <!-- 
-	        	provides Spring Boot support in Maven, allowing you to 
+	        <!--
+	        	provides Spring Boot support in Maven, allowing you to
 	        	package executable jar or war archives and run an application “in-place”
 	        -->
 	        <dependencies>
                 <dependency>
                     <groupId>org.springframework.boot</groupId>
                     <artifactId>spring-boot-maven-plugin</artifactId>
-                    <version>1.2.7.RELEASE</version>
+                    <version>1.5.10.RELEASE</version>
                 </dependency>
             </dependencies>
             <configuration>
@@ -202,8 +201,8 @@
                 <createDependencyReducedPom>true</createDependencyReducedPom>
                 <minimizeJar>false</minimizeJar>
                 <filters>
-	                <!-- 
-		              	To avoid the following error message with maven shade plugin: 'Exception in thread 
+	                <!--
+		              	To avoid the following error message with maven shade plugin: 'Exception in thread
 		              	"main" java.lang.SecurityException: Invalid signature file digest for Manifest main attributes'
 		              	add the following configuration to filter all files in META-INF ending with .SF, .DSA, and .RSA
 		              	for all artifacts (*:*) when creating uber-jar file
@@ -225,16 +224,16 @@
 	              <goal>shade</goal>
 	            </goals>
 	            <configuration>
-		          <!-- 
-		          	using the default Shade plugin configuration with Maven 
-		          	
+		          <!--
+		          	using the default Shade plugin configuration with Maven
+
 		          	<transformer implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
 	                  <manifestEntries>
 	                    <Main-Class>orgMiJmeterSockjsSampler.Hello</Main-Class>
 	                  </manifestEntries>
 	                </transformer>
-		          	
-		          	that is inherited form spring-boot-starter-parent, 
+
+		          	that is inherited form spring-boot-starter-parent,
 		          	I get the following error from Maven: Unable to parse configuration of mojo org.apache.maven.plugins:maven-shade-plugin:3.1.0:
 		          	shade for parameter transformers...
 		          	using a specific configuration, for that reason
@@ -256,7 +255,6 @@
                           implementation="org.apache.maven.plugins.shade.resource.ServicesResourceTransformer" />
                       <transformer
                           implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
-                          <mainClass>orgMiJmeterSockjsSampler.Hello</mainClass>
                       </transformer>
                   </transformers>
 	            </configuration>

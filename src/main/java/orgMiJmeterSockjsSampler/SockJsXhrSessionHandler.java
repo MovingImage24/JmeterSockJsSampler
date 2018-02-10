@@ -30,7 +30,7 @@ public class SockJsXhrSessionHandler extends AbstractWebSocketHandler {
     public void afterConnectionEstablished(WebSocketSession session) throws Exception {
 		this.responseMessage.addMessage(" Session id : " + session.getId());
 		this.responseMessage.addMessage(" - Waiting for the server connection for " + this.connectionTime + " MILLISECONDS");
-		this.responseMessage.addMessage(" - XHR-Streaming connection has been opend");
+		this.responseMessage.addMessage(" - XHR-Streaming connection has been opened");
 		
 		SockJsStompTextMessageBuilder textMessageBuilder = SockJsStompTextMessageBuilder.create(StompCommand.CONNECT);
 		String[] splitHeaders = connectionHeader.split("\n");
@@ -81,7 +81,7 @@ public class SockJsXhrSessionHandler extends AbstractWebSocketHandler {
 	      	 			sb.append("\\n" + splitMessageHeaders[i]);
 	      	 		}
 	      			
-	      			sb.append("\\n\\n" + messageContent.toString() + "\\u0000\\n\"]; didn't match any pattern");
+	      			sb.append("\\n\\n" + messageContent.toString() + "\\u0000\\n\"];");
 	      							
 	      			this.responseMessage.addMessage(sb.toString());
 	      			this.responseMessage.setMessageCounter(this.messageCounter);
