@@ -3,12 +3,18 @@ package orgMiJmeterSockjsSampler;
 import java.io.Serializable;
 import java.net.URI;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+
+import javax.net.ssl.SSLContext;
+import javax.net.ssl.TrustManager;
 
 import org.apache.jmeter.config.Arguments;
 import org.apache.jmeter.protocol.java.sampler.AbstractJavaSamplerClient;
 import org.apache.jmeter.protocol.java.sampler.JavaSamplerContext;
 import org.apache.jmeter.samplers.SampleResult;
+import org.apache.tomcat.websocket.Constants;
 import org.springframework.core.task.SyncTaskExecutor;
 import org.springframework.http.HttpHeaders;
 import org.springframework.messaging.converter.StringMessageConverter;
@@ -60,7 +66,7 @@ public class SockJsSampler extends AbstractJavaSamplerClient implements Serializ
         Arguments defaultParameters = new Arguments();
         defaultParameters.addArgument(TRANSPORT, XHR_STREAMING_TRANSPORT, "", "Choose a transport-type: 'websocket' or 'xhr-streaming'");
         defaultParameters.addArgument(HOST, "https://[xxx].[xxx]");
-        defaultParameters.addArgument(PATH, "/[xxx]");
+        defaultParameters.addArgument(PATH, "/[xxx]/");
         defaultParameters.addArgument(CONNECTION_TIME, "[30000]");
         defaultParameters.addArgument(RESPONSE_BUFFER_TIME, "[30000]");
         defaultParameters.addArgument(CONNECTION_HEADERS_LOGIN, "login:[xxx]");
@@ -125,8 +131,16 @@ public class SockJsSampler extends AbstractJavaSamplerClient implements Serializ
     
     // Websocket test
  	public void createWebsocketConnection(JavaSamplerContext context, ResponseMessage responseMessage) throws Exception {
- 		List<Transport> transports = new ArrayList<>(1);
-     	transports.add(new WebSocketTransport(new StandardWebSocketClient()));
+ 		StandardWebSocketClient simpleWebSocketClient = new StandardWebSocketClient();
+		// set up a TrustManager that trusts everything
+		SSLContext sslContext = SSLContext.getInstance("TLS");
+		sslContext.init(null, new TrustManager[] { new BlindTrustManager() }, null);
+		Map<String, Object> userProperties = new HashMap<>();
+		userProperties.put(Constants.SSL_CONTEXT_PROPERTY, sslContext);
+		simpleWebSocketClient.setUserProperties(userProperties);
+			
+		List<Transport> transports = new ArrayList<>(1);
+     	transports.add(new WebSocketTransport(simpleWebSocketClient));
  				
  		SockJsClient sockJsClient = new SockJsClient(transports);
  		WebSocketStompClient stompClient = new WebSocketStompClient(sockJsClient);
@@ -160,6 +174,7 @@ public class SockJsSampler extends AbstractJavaSamplerClient implements Serializ
  							+ "\n - Using disconnect pattern \"\"";
 
  		responseMessage.addMessage(startMessage);
+ 		
  		stompClient.connect(stompUrlEndpoint.toString(), handshakeHeaders, connectHeaders, sessionHandler, new Object[0]);
  		 	
  		// wait some time till killing the stomp connection
@@ -173,7 +188,7 @@ public class SockJsSampler extends AbstractJavaSamplerClient implements Serializ
  	
  		String messageProblems = "\n[Problems]"
 								+ "\n" + responseMessage.getProblems();
-
+ 		
  		responseMessage.addMessage(messageProblems);
  	}
  	
