@@ -2,8 +2,8 @@ Mi Jmeter SockJS Stomp Sampler
 ======
 
 Adapted from
-https://github.com/Fyro-Ing/JMeter-WebSocket-StompSampler
-https://github.com/jaysridhar/spring-websocket-client
+* https://github.com/Fyro-Ing/JMeter-WebSocket-StompSampler
+* https://github.com/jaysridhar/spring-websocket-client
 
 JMeter - SockJS Stomp Sampler supporting the two transport protocols websocket and xhr-streaming
 
@@ -45,6 +45,6 @@ The Sampler waits for the given [responseBufferTime] for all incoming messages. 
 
 It's possible to process that response for example via a BeanShell PostProcessor with the following code:
 
-  vars.put("mySamplerResponse", prev.getResponseMessage());
+	vars.put("mySamplerResponse", prev.getResponseMessage());
 
 Important fact: the connections are not shared between JMeter threads and running a test with 100 concurrent users will open 100 WebSocket/XHR-Streaming connections.
